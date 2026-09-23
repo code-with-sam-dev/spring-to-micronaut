@@ -1,6 +1,7 @@
 package dev.codewithsam.payments;
 
 import java.net.URI;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,11 @@ public class PaymentController {
     public ResponseEntity<Void> create(@RequestBody NewPayment body) {
         Long id = service.record(body.amount(), body.currency());
         return ResponseEntity.created(URI.create("/payments/" + id)).build();
+    }
+
+    @PostMapping("/batch")
+    public List<Long> createAll(@RequestBody List<NewPayment> body) {
+        return service.recordAll(body);
     }
 
     @GetMapping("/{id}")

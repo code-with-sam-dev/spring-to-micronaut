@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import java.net.URI;
+import java.util.List;
 
 @Controller("/payments")
 public class PaymentController {
@@ -23,6 +24,11 @@ public class PaymentController {
     public HttpResponse<Void> create(@Body NewPayment body) {
         Long id = service.record(body.amount(), body.currency());
         return HttpResponse.created(URI.create("/payments/" + id));
+    }
+
+    @Post("/batch")
+    public List<Long> createAll(@Body List<NewPayment> body) {
+        return service.recordAll(body);
     }
 
     @Get("/{id}")
